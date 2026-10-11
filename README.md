@@ -44,13 +44,16 @@ qsql 不解数据库，只在它前面加一层**可验证的门**：
 
 ---
 
-## 安装（下载器）
+## 安装（官方下载器）
 
 一行命令，自动下载并装好（需要 root）：
 
 ```bash
-curl -fsSL https://github.com/furrynaling-alt/qsql/releases/latest/download/install.sh | sudo bash
+curl -fsSL https://psql.naling.net/dl/install.sh | sudo bash
 ```
+
+> 下载走官方服务器：**每次下载会现场生成一个 20 位 PID（授权编号）并写入安装包**，
+> 同时记录下载时间与来源。装好后在后台「设置 → 授权」能看到这套部署的 PID 与到期日。
 
 装完会打印**你的专属后台地址**，形如：
 
@@ -64,9 +67,15 @@ curl -fsSL https://github.com/furrynaling-alt/qsql/releases/latest/download/inst
 
 ```bash
 V=0.2.0
-curl -fsSLO https://github.com/furrynaling-alt/qsql/releases/download/v$V/qsql-$V.zip
+curl -fsSLO https://psql.naling.net/dl/qsql-$V.zip     # 响应头 X-Qsql-Pid 就是你的 PID
 unzip qsql-$V.zip -d /opt/ && sudo bash /opt/qsql/install.sh
 ```
+
+### 授权说明
+
+- 所有发布件都是 **评估版：一年内免费使用**
+- 安装包自带 `license.json`（PID / 签发日 / 到期日），后台「设置」里随时可查
+- 到期后：后台会显示授权到期页，列出**联系邮箱**和本机的 **PID 码**，把 PID 发来即可续期
 
 ### 放到 Nginx 后面（推荐）
 
@@ -141,6 +150,12 @@ qsql 是**门禁层**，数据库界面可以继续用它们（默认接 Adminer
 
 **Q：支持 MySQL 吗？**
 门禁层与数据库无关；当前配套的集群视图与导出按 PostgreSQL 实现。
+
+**Q：怎么看我的授权 / PID？**
+后台「设置 → 授权」：版本、PID、签发日、到期日、剩余天数都在那儿。
+
+**Q：到期了会怎样？**
+后台进入到期提示页，显示联系邮箱与本机 PID 码，发邮件即可续期（数据不受影响）。
 
 **Q：能从内网访问吗？**
 可以，把内网 IP 加进白名单即可（改 `pg_hba.conf` + nftables 各一行）。
